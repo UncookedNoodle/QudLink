@@ -2,6 +2,10 @@
 
 Second-screen companion for **Caves of Qud**. Made for dual-screen handhelds like the AYN Thor: Qud runs on the top screen, and the QudLink app turns the bottom screen into a Qud-styled control panel.
 
+<p>
+<img src="screenshots/act.png" width="270"> <img src="screenshots/items.png" width="270"> <img src="screenshots/near.png" width="270"> <img src="screenshots/status.png" width="270"> <img src="screenshots/quests.png" width="270"> <img src="screenshots/log.png" width="270"> 
+</p>
+
 ## Install
 
 1. Subscribe to the mod on the [Steam Workshop](https://steamcommunity.com/sharedfiles/filedetails/?id=3838966520) and enable it in Qud's Mods menu.
