@@ -1,5 +1,5 @@
 "use strict";
-const API = "http://127.0.0.1:8765";
+const API = location.protocol === "http:" ? "" : "http://127.0.0.1:8765"; // "" when served by the mod itself
 let state = null, map = null, tab = "act", lastJson = "";
 const $ = id => document.getElementById(id);
 

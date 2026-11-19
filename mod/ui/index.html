@@ -1,0 +1,114 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>QudLink</title>
+<script src="shaders.js"></script>
+<script src="demo.js"></script>
+<script src="qudtext.js"></script>
+<style>
+:root{
+  --k:#0f3b3a;--K:#155352;--r:#a64a2e;--R:#d74200;--g:#009403;--G:#00c420;
+  --b:#0048bd;--B:#0096ff;--c:#40a4b9;--C:#77bfcf;--m:#b154cf;--M:#da5bd6;
+  --w:#98875f;--W:#cfc041;--y:#b1c9c3;--Y:#ffffff;--o:#f15f22;--O:#e99f10;
+  --bg:#041312;--panel:#07201f;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--y);
+  font-family:"Source Code Pro","Droid Sans Mono",monospace;font-size:15px;overflow:hidden}
+#app{display:flex;flex-direction:column;height:100%}
+.frame{border:2px solid var(--K);outline:1px solid var(--k);outline-offset:-5px;background:var(--panel)}
+header{padding:8px 10px 6px;margin:6px 6px 0}
+.row{display:flex;align-items:center;gap:8px}
+.name{color:var(--Y);font-weight:bold;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dim{color:var(--K)}
+.bar{height:14px;background:var(--k);border:1px solid var(--K);margin-top:5px;position:relative}
+.bar.thin{height:5px;margin-top:3px}
+.bar>i{display:block;height:100%}
+.bar>span{position:absolute;inset:0;text-align:center;font-size:11px;line-height:12px;color:var(--Y);text-shadow:0 0 2px #000}
+.surv{display:flex;gap:10px;font-size:12px;margin-top:4px;flex-wrap:wrap}
+nav{display:flex;margin:6px 6px 0;gap:3px}
+nav button{flex:1;background:var(--panel);color:var(--c);border:1px solid var(--K);padding:8px 0;font:inherit;font-size:12px;text-transform:uppercase;letter-spacing:.5px}
+nav button.on{color:var(--W);border-color:var(--w);background:#0b2a28}
+main{flex:1;overflow-y:auto;margin:6px;padding:8px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.btn{background:var(--bg);border:1px solid var(--K);color:var(--C);padding:10px 6px;min-height:52px;
+  font:inherit;font-size:13px;text-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px}
+.btn:active{background:var(--K);color:var(--Y)}
+.btn.cd{color:var(--K);border-color:var(--k)}
+.btn.toggled{border-color:var(--G);color:var(--G)}
+.btn small{font-size:11px;color:var(--w)}
+h3{margin:12px 0 6px;color:var(--W);font-size:13px;font-weight:normal;text-transform:uppercase;letter-spacing:2px}
+h3:first-child{margin-top:0}
+h3::before{content:"\25BA  ";color:var(--w)}
+.item{display:flex;padding:6px;border-bottom:1px solid var(--k);gap:8px;align-items:center}
+.item:active{background:var(--K)}
+.item .n{flex:1}
+.item .s{color:var(--w);font-size:12px;text-align:right}
+.tile{width:24px;height:36px;image-rendering:pixelated;flex:none;background:var(--bg);border:1px solid var(--k);display:inline-block}
+.ptile{width:32px;height:48px;image-rendering:pixelated;flex:none;display:inline-block}
+.hostile .tile{border-color:var(--R)}
+.mini{height:4px;background:var(--k);margin-top:3px}.mini i{display:block;height:100%}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.stat{border:1px solid var(--K);padding:6px;text-align:center}
+.stat b{display:block;color:var(--Y);font-size:20px}
+.stat span{color:var(--c);font-size:11px;letter-spacing:1px}
+.eff{padding:6px 0;border-bottom:1px solid var(--k)}
+.eff div{color:var(--K);font-size:12px;white-space:pre-wrap}
+.tags{display:flex;flex-wrap:wrap;gap:5px}
+.tags span{border:1px solid var(--K);padding:3px 7px;font-size:12px;color:var(--C)}
+.log p{margin:0 0 5px;line-height:1.35}
+.quest{border:1px solid var(--K);padding:8px;margin-bottom:8px}
+.quest b{color:var(--W);font-weight:normal}
+.step{font-size:13px;margin-top:5px}
+.step.done{color:var(--K);text-decoration:line-through}
+.step .t{display:block;color:var(--K);font-size:12px;margin-left:16px}
+#mapwrap{border:1px solid var(--K);background:#000}
+#map{display:block;width:100%;touch-action:none}
+.dpad{display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(3,52px);gap:5px;justify-content:center;margin:10px 0}
+.dpad .btn{min-height:0;padding:0;font-size:18px}
+.hint{font-size:11px;color:var(--K);text-align:center;margin-top:4px}
+.qs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.qs .btn{min-height:64px;font-size:11px}
+.qs .empty{color:var(--K);border-style:dashed}
+#sheet{position:fixed;inset:0;background:rgba(0,0,0,.7);display:none;align-items:flex-end}
+#sheet.open{display:flex}
+#sheet .frame{width:100%;margin:6px;padding:10px;max-height:85%;overflow-y:auto}
+#sheet .title{color:var(--Y);margin-bottom:8px;text-align:center}
+#sheet .desc{white-space:pre-wrap;font-size:13px;line-height:1.4;margin-bottom:8px}
+#sheet .act{display:block;width:100%;margin:4px 0;text-align:left;padding:12px;min-height:0}
+#sheet .act[disabled]{color:var(--K)}
+#conn{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;color:var(--c);text-align:center;padding:20px}
+#conn.hide{display:none}
+#conn b{color:var(--W);font-size:22px;letter-spacing:4px;margin-bottom:10px}
+#flash{position:fixed;inset:0;pointer-events:none;box-shadow:inset 0 0 0 0 transparent;transition:box-shadow .4s}
+#flash.on{box-shadow:inset 0 0 40px 8px var(--R)}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="frame">
+    <div class="row"><span id="ptile"></span><span class="name" id="pname">—</span><span id="plv"></span></div>
+    <div class="row dim" style="font-size:12px"><span id="pzone" style="flex:1"></span><span id="pturn"></span></div>
+    <div class="bar"><i id="hpfill"></i><span id="hptext"></span></div>
+    <div class="bar thin"><i id="xpfill" style="background:var(--B)"></i></div>
+    <div class="surv" id="surv"></div>
+  </header>
+  <nav>
+    <button data-tab="act" class="on">Act</button>
+    <button data-tab="items">Items</button>
+    <button data-tab="map">Near</button>
+    <button data-tab="status">Char</button>
+    <button data-tab="quests">Quest</button>
+    <button data-tab="log">Log</button>
+  </nav>
+  <main class="frame" id="main"></main>
+</div>
+<div id="sheet"><div class="frame" id="sheetbox"></div></div>
+<div id="flash"></div>
+<div id="conn"><b>QUDLINK</b><div id="connmsg">Waiting for Caves of Qud…</div>
+  <div class="dim" style="margin-top:14px;font-size:12px">Enable the QudLink mod and load a save.</div></div>
+<script src="app.js"></script>
+</body>
+</html>

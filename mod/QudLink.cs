@@ -36,6 +36,7 @@ namespace QudLink
         public static void Start()
         {
             if (listener != null) return;
+            try { uiDir = System.IO.Path.Combine(ModManager.GetMod()?.Path ?? "", "ui"); } catch { }
             try
             {
                 listener = new HttpListener();
@@ -63,6 +64,25 @@ namespace QudLink
             }
         }
 
+        static string uiDir;
+        static readonly Dictionary<string, string> UiFiles = new Dictionary<string, string> {
+            { "/", "index.html" }, { "/index.html", "index.html" }, { "/app.js", "app.js" },
+            { "/qudtext.js", "qudtext.js" }, { "/shaders.js", "shaders.js" }, { "/demo.js", "demo.js" } };
+
+        // Browser UI: http://127.0.0.1:8765/ serves the same page the Android app bundles.
+        static bool ServeUi(HttpListenerContext ctx, string path)
+        {
+            if (!UiFiles.TryGetValue(path, out var name) || uiDir == null) return false;
+            var f = System.IO.Path.Combine(uiDir, name);
+            if (!System.IO.File.Exists(f)) return false;
+            var b = System.IO.File.ReadAllBytes(f);
+            ctx.Response.ContentType = name.EndsWith(".html") ? "text/html; charset=utf-8" : "text/javascript; charset=utf-8";
+            ctx.Response.AddHeader("Cache-Control", "no-cache");
+            ctx.Response.OutputStream.Write(b, 0, b.Length);
+            ctx.Response.Close();
+            return true;
+        }
+
         static void Handle(HttpListenerContext ctx)
         {
             string body;
@@ -81,6 +101,7 @@ namespace QudLink
                     }
                     ctx.Response.StatusCode = 204; ctx.Response.Close(); return;
                 }
+                if (ServeUi(ctx, path)) return;
                 // Commands need a custom header. Browsers can't add one cross-origin without a CORS
                 // preflight (which we never approve), so random web pages can't drive the game.
                 if ((path == "/do" || path == "/actions" || path == "/travel" || path == "/look" || path == "/target" || path == "/describe") && ctx.Request.Headers["X-QudLink"] != "1")

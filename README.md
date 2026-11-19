@@ -8,7 +8,7 @@ Second-screen companion for **Caves of Qud**. Made for dual-screen handhelds lik
 2. Download `QudLink.apk` from the [latest release](https://github.com/UncookedNoodle/QudLink/releases/latest) and install it on the same Android device that runs Qud (allow installs from unknown sources).
 3. Start Qud, load a save, then open the QudLink app.
 
-The mod only exposes an API on `127.0.0.1:8765`. Opening that address in a browser just shows `{"hello":"qudlink",...}`. The interface is the Android app.
+No Android device? With the mod running, open **http://127.0.0.1:8765/** in a browser on the same machine for the same interface.
 
 ## Features
 
@@ -20,7 +20,7 @@ The mod only exposes an API on `127.0.0.1:8765`. Opening that address in a brows
 
 ## Layout
 
-- `mod/`: the Qud mod (`QudLink.cs`, `manifest.json`)
+- `mod/`: the Qud mod (`QudLink.cs`, `manifest.json`); `mod/ui/` is a copy of `app/assets/` that the mod serves to browsers
 - `app/`: the Android app (a WebView around `app/assets/`)
 - `setup-sdk.sh` / `build-apk.sh`: build the APK without Android Studio
 
