@@ -1,0 +1,8 @@
+{
+  "WorkshopId": 0,
+  "Title": "QudLink - Second Screen Companion",
+  "Description": "[h1]QudLink[/h1]\nTurns a second screen into a Qud-styled control panel. Made for dual-screen handhelds (AYN Thor, etc.) running Qud through a Windows/Steam launcher, but works anywhere the companion app can reach the game.\n\n[h2]What it does[/h2]\n[list]\n[*][b]Act[/b] - tap abilities (with live cooldowns and toggle states) and common commands: wait, rest, get, look, fire, reload, throw, auto-explore.\n[*][b]Items[/b] - equipment and inventory with real tiles and colors; tap an item for its full action menu (eat, drink, equip, apply, drop...).\n[*][b]Status[/b] - attributes, AV/DV, speed and active effects.\n[*][b]Log[/b] - the message log in Qud's colors.\n[/list]\n\n[h2]How it works[/h2]\nThe mod runs a tiny local web server on [b]127.0.0.1:8765[/b] (this device only - never exposed to your network). The companion Android app, or any browser on the same machine, reads game state and sends commands through the same input path as Qud's own ability bar.\n\n[h2]Notes[/h2]\n[list]\n[*]Commands wait while Qud has a menu or popup open.\n[*]The Android companion app is installed separately (APK).\n[/list]",
+  "Tags": "Script,UI",
+  "Visibility": "2",
+  "ImagePath": "preview.png"
+}

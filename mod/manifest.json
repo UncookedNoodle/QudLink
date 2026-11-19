@@ -1,0 +1,1 @@
+{ "id": "QudLink", "title": "QudLink", "description": "Serves game state on port 8765 for a second-screen companion.", "version": "1.0.0", "author": "jordy" }
